@@ -46,5 +46,10 @@ namespace pump_go.pump_go.Data.Repositories
             _context.Conversas.Update(conversation);
             await _context.SaveChangesAsync();
         }
+        public async Task AddMessageAsync(Message message)
+        {
+            await _context.Mensagens.AddAsync(message);
+            await _context.SaveChangesAsync();
+        }
     }
 }

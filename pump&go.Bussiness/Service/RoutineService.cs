@@ -125,14 +125,14 @@ namespace pump_go.pump_go.Bussiness.Service
 
             if (routineToUpdate.UserId != userId)
             {
-                throw new UnauthorizedAccessException("Você não tem permissão para deletar esta rotina.");
+                throw new UnauthorizedAccessException("Você não tem permissão para editar esta rotina.");
             }
 
             var exerciseIdsDTO = routineDTO.RoutineItems.Select(item => item.ExerciseId).ToList();
             var existingExercises = await _exerciseRepository.GetByIdsAsync(exerciseIdsDTO);
             if (existingExercises.Count() != exerciseIdsDTO.Count)
             {
-                throw new Exception("Um ou mais exercíos informados na atualização são invalidos.");
+                throw new BadRequestException("Um ou mais exercícios informados na atualização são invalidos.");
             }
 
             routineToUpdate.Name = routineDTO.Name;

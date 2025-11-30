@@ -1,4 +1,6 @@
-﻿namespace pump_go.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace pump_go.Entities
 {
     public class RoutineItem
     {
@@ -8,5 +10,9 @@
         public int Order { get; set; }
         public string Series { get; set; }
         public int RestTime { get; set; }
+        public Guid RoutineId { get; set; }
+
+        [ForeignKey("RoutineId")] 
+        public Routine Routine { get; set; }
     }
 }

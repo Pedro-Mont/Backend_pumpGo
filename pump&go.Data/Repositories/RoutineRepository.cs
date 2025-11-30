@@ -37,7 +37,31 @@ namespace pump_go.pump_go.Data.Repositories
 
         public async Task UpdateAsync(Routine routine)
         {
-            _context.RotinasDeTreino.Update(routine);
+            var rotinaExists = _context.ChangeTracker.Entries<Routine>()
+                .FirstOrDefault(e => e.Entity.Id == routine.Id)?.Entity;
+
+            if (rotinaExists == null)
+            {
+                _context.RotinasDeTreino.Attach(routine);
+                _context.Entry(routine).State = EntityState.Modified;
+            }
+            else
+            {
+                _context.Entry(rotinaExists).CurrentValues.SetValues(routine);
+            }
+
+            var itensNoBanco = await _context.ItensRotina
+                .Where(i => i.RoutineId == routine.Id)
+                .ToListAsync();
+
+            _context.ItensRotina.RemoveRange(itensNoBanco);
+
+            foreach (var newItem in routine.RoutineItems)
+            {
+                newItem.RoutineId = routine.Id;
+                _context.Entry(newItem).State = EntityState.Added;
+            }
+
             await _context.SaveChangesAsync();
         }
 

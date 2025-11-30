@@ -110,11 +110,7 @@ namespace pump_go.pump_go.Bussiness.Service
                 SentDate = DateTime.UtcNow
             };
 
-            if (conversation.Messages == null) conversation.Messages = new List<Message>();
-
-            conversation.Messages.Add(newMessage);
-
-            await _conversationRepository.UpdateAsync(conversation);
+            await _conversationRepository.AddMessageAsync(newMessage);
 
             string senderName = "Desconhecido";
 

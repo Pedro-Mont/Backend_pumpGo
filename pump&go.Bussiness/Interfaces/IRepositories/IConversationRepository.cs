@@ -11,5 +11,6 @@ namespace pump_go.Interfaces.IRepositories
         Task<Conversation> FindByUserAndProfessionalAsync(Guid userId, Guid professionalId);
         Task AddAsync(Conversation conversation);
         Task UpdateAsync(Conversation conversation);
+        Task AddMessageAsync(Message message);
     }
 }

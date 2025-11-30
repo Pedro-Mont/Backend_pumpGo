@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using pump_go.Entities;
 using pump_go.pump_go.Bussiness.DTOs.Routine;
+using pump_go.pump_go.Bussiness.Exceptions;
 using pump_go.pump_go.Bussiness.Interfaces.IServices;
 using System.Security.Claims;
 
@@ -94,6 +95,29 @@ namespace pump_go.pump_go.API.Controllers
             catch (UnauthorizedAccessException ex)
             {
                 return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateRoutine(Guid id, [FromBody] RoutineUpdateDTO routintDto)
+        {
+            try
+            {
+                var usuarioId = GetUserIdDoToken();
+                await _routineService.UpdateRoutineAsync(id, usuarioId, routintDto);
+                return NoContent(); 
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {
